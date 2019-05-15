@@ -10,6 +10,13 @@ def checkposted(posted, function):
             return 301
         else:
             return 200
+    else:
+        if "x" not in posted or "y" not in posted:
+            return 301
+        elif(int(posted["y"]) == 0):
+            return 302
+        else:
+            return 200
 
 class Add(Resource):
     def post(self):
@@ -72,9 +79,30 @@ class Multiply(Resource):
             'Status code': 200
         }
         return jsonify(ret)
+class Division(Resource):
+    def post(self):
+        posted = request.get_json()
+        status = checkposted(posted, "divide")
+        if (status != 200):
+            retJ = {
+                "Message": "An error happened",
+                "Status code": status
+            }
+            return jsonify(retJ)
+        x = posted["x"]
+        y = posted["y"]
+        x = int(x)
+        y = int(y)
+        quo = x*1.0/ y
+        ret = {
+            'Message': quo,
+            'Status code': 200
+        }
+        return jsonify(ret)
 
 api.add_resource(Add, "/add")
 api.add_resource(Subtract,"/subtract")
 api.add_resource(Multiply,"/multiply")
+api.add_resource(Division,"/divide")
 if __name__ == "__main__":
     app.run(debug=True)
