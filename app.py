@@ -5,7 +5,7 @@ app = Flask(__name__)
 api=Api(app)
 
 def checkposted(posted, function):
-    if(function == "add" or function == "subtract"):
+    if(function == "add" or function == "subtract" or function == "multiply"):
         if "x" not in posted or "y" not in posted:
             return 301
         else:
@@ -52,8 +52,29 @@ class Subtract(Resource):
             'Status code': 200
         }
         return jsonify(ret)
+class Multiply(Resource):
+    def post(self):
+        posted = request.get_json()
+        status = checkposted(posted, "multiply")
+        if (status != 200):
+            retJ = {
+                "Message": "An error happened",
+                "Status code": status
+            }
+            return jsonify(retJ)
+        x = posted["x"]
+        y = posted["y"]
+        x = int(x)
+        y = int(y)
+        prod = x * y
+        ret = {
+            'Message': prod,
+            'Status code': 200
+        }
+        return jsonify(ret)
 
 api.add_resource(Add, "/add")
 api.add_resource(Subtract,"/subtract")
+api.add_resource(Multiply,"/multiply")
 if __name__ == "__main__":
     app.run(debug=True)
