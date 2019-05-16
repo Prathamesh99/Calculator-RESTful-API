@@ -105,4 +105,4 @@ api.add_resource(Subtract,"/subtract")
 api.add_resource(Multiply,"/multiply")
 api.add_resource(Division,"/divide")
 if __name__ == "__main__":
-    app.run(host='0.0.0.0',debug=True)
+    app.run(host='0.0.0.0', debug=True)
